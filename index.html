@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFT Team Composer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>TFT Team Composer</h1>
+        <p>construit ton équipe</p>
+    </header>
+    <main>
+        
+        <div class="section">
+            <div class="filtres">
+                <!-- Sélection de l'origine -->
+                <div class="filtre">
+                    <h3 style="text-align: center;">Origine</h3>
+                    <div id="origins" class="choices"></div>
+                </div>
+            
+                <!-- Sélection du type -->
+                <div class="filtre">
+                    <h3 style="text-align: center;">Type</h3>
+                    <div id="types" class="choices"></div>
+                </div>
+
+                <!-- Sélection du coût -->
+                <div class="filtre">
+                    <h3 style="text-align: center;">Coût</h3>
+                    <div id="costs" class="choices"></div>
+                </div>
+            </div>
+            
+            <div class="resultats">
+                <h3>Champions:</h3>
+                <div id="results"></div>
+            </div>   
+        </div>
+        <div class="team-section">
+            <h2>Mon Équipe</h2>
+            <div id="team"></div>
+        </div>
+    </main>
+    <script src="ontologie.js"></script>
+</body>
+</html>
