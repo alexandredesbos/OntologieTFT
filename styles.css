@@ -147,6 +147,26 @@ button:hover {
     color: #007bff;
 }
 
+.team-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.champions-section {
+    flex: 1;
+}
+
+.score-section {
+    flex: 0 0 200px; /* Ajustez la largeur selon vos besoins */
+    text-align: right;
+}
+
+.score-section p {
+    font-size: 1.5em; /* Taille de la police pour le score */
+    font-weight: bold;
+}
+
 .champion-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));

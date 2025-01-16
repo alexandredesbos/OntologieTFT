@@ -439,6 +439,11 @@ function addToTeam(champion) {
         return;
     }
 
+    if (team.length >= 8) {
+        alert("Votre équipe ne peut pas contenir plus de 8 champions.");
+        return;
+    }
+
     team.push(champion);
     updateTeam();
 }
@@ -455,22 +460,32 @@ function updateTeam() {
         )
         .join("");
 
-    teamDiv.innerHTML = `
-        ${team.length ? `<div class="champion-grid">
-              ${team.map(champ => `
-                  <div class="champion-item">
-                      <img src="champions/${champ.toLowerCase().replace(/ /g, "-")}.png" alt="${champ}">
-                      <p>${champ}</p>
-                      <button onclick="removeFromTeam('${champ}')">❌</button>
-                  </div>
-              `).join("")}
-          </div>` : `<p>Aucun champion dans l'équipe.</p>`}
-        <p><strong>Score de l'équipe : ${score}</strong></p>
-        <div class="synergies-section">
-            <h3>Synergies Actives</h3>
-            ${synergiesHTML || "<p>Aucune synergie active.</p>"}
+        teamDiv.innerHTML = `
+        <div>
+            <div class="team-container">
+                <div class="champions-section">
+                    <p><strong>${team.length}/8</strong></p>
+                    ${team.length ? `<div class="champion-grid">
+                        ${team.map(champ => `
+                            <div class="champion-item">
+                                <img src="champions/${champ.toLowerCase().replace(/ /g, "-")}.png" alt="${champ}">
+                                <p>${champ}</p>
+                                <button onclick="removeFromTeam('${champ}')">❌</button>
+                            </div>
+                        `).join("")}
+                </div>` : `<p>Aucun champion dans l'équipe.</p>`}
+            </div>
+            <div class="score-section">
+                <p><strong>Score de l'équipe : ${score}</strong></p>
+            </div>
         </div>
-    `;
+        <div class="synergies-section">
+                <h3>Synergies Actives</h3>
+                ${synergiesHTML || "<p>Aucune synergie active.</p>"}
+            </div>
+        </div>
+        
+        `;
 }
 
 function removeFromTeam(champion) {
