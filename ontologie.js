@@ -185,36 +185,7 @@ const tftOntology = {
                 "Magic reaper": {
                     "2 cost": ["Akali"]
                 }
-            }
-        },
-        "Origine unique": {
-            "BanishedMage": {
-                "Magic reaper": {
-                    "6 cost": ["Mel"]
-                }
             },
-            "BloodHunter": {
-                "Attack fighter": {
-                    "6 cost": ["Warwick"]
-                }
-            },
-            "MachineHerald": {
-                "Magic caster": {
-                    "6 cost": ["Viktor"]
-                }
-            },
-            "HighRoller": {
-                "Attack fighter": {
-                    "5 cost": ["Sevika"]
-                }
-            },
-            "JunkerKing": {
-                "Magic fighter": {
-                    "5 cost": ["Rumble"]
-                }
-            }
-        },
-        "classe": {
             "Ambusher": {
                 "Attack reaper": {
                     "3 cost": ["Smeech"]
@@ -394,12 +365,7 @@ const synergies= {
     "Dominator": [2, 4, 6],
     "PitFighter": [2, 4, 6, 8],
     "Artillerist": [2, 4, 6],
-    "QuickStriker": [2, 3, 4],
-    "BanishedMage": [1],
-    "BloodHunter": [1],
-    "MachineHerald": [1],
-    "HighRoller": [1],
-    "JunkerKing": [1]
+    "QuickStriker": [2, 3, 4]
 }
 
 
@@ -437,7 +403,7 @@ function createButtons(parentDiv, items, onClickHandler) {
 
 // Mise à jour des résultats
 function updateResults() {
-    let champions = [];
+    let champions = new Set();
 
     Object.entries(tftOntology.Champions.Origine).forEach(([origin, types]) => {
         if (selectedOrigin && origin !== selectedOrigin) return;
@@ -445,10 +411,13 @@ function updateResults() {
             if (selectedType && type !== selectedType) return;
             Object.entries(costs).forEach(([cost, champs]) => {
                 if (selectedCost && cost !== selectedCost) return;
-                champions = champions.concat(champs);
+                champs.forEach(champ => champions.add(champ));
             });
         });
     });
+
+    // Convertir le Set en tableau
+    champions = Array.from(champions);
 
     resultsDiv.innerHTML = champions.length
         ? `<p></p><div class="champion-grid">
@@ -516,7 +485,6 @@ function calculateScore() {
     let typeCounts = {};
     let totalCost = 0;
 
-    // Parcourir l'équipe pour calculer les métriques
     team.forEach(champion => {
         for (const [origin, types] of Object.entries(tftOntology.Champions.Origine)) {
             for (const [type, costs] of Object.entries(types)) {
