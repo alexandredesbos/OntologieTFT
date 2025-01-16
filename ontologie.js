@@ -447,8 +447,8 @@ function addToTeam(champion) {
     return;
   }
 
-  if (team.length >= 8) {
-    alert("Votre équipe ne peut pas contenir plus de 8 champions.");
+  if (team.length >= 10) {
+    alert("Votre équipe ne peut pas contenir plus de 10 champions.");
     return;
   }
 
@@ -460,6 +460,8 @@ function updateTeam() {
   const teamDiv = document.getElementById("team");
   const score = calculateScore();
   const synergies = calculateSynergies();
+  //   const bestScore = findBestRandomTeam(10, 1000);
+  const bestScore = 303;
 
   const synergiesHTML = Object.entries(synergies)
     .map(
@@ -469,41 +471,53 @@ function updateTeam() {
     .join("");
 
   teamDiv.innerHTML = `
-        <div>
-            <div class="team-container">
-                <div class="champions-section">
-                    <p><strong>${team.length}/8</strong></p>
-                    ${
-                      team.length
-                        ? `<div class="champion-grid">
-                        ${team
-                          .map(
-                            (champ) => `
-                            <div class="champion-item">
-                                <img src="champions/${champ
-                                  .toLowerCase()
-                                  .replace(/ /g, "-")}.png" alt="${champ}">
-                                <p>${champ}</p>
-                                <button onclick="removeFromTeam('${champ}')">❌</button>
-                            </div>
-                        `
-                          )
-                          .join("")}
-                </div>`
-                        : `<p>Aucun champion dans l'équipe.</p>`
-                    }
+    <div>
+        <div class="team-container">
+            <div class="champions-section">
+                <p><strong>${team.length}/10</strong></p>
+                ${
+                  team.length
+                    ? `<div class="champion-grid">
+                            ${team
+                              .map(
+                                (champ) => `
+                                    <div class="champion-item">
+                                        <img src="champions/${champ
+                                          .toLowerCase()
+                                          .replace(
+                                            / /g,
+                                            "-"
+                                          )}.png" alt="${champ}">
+                                        <p>${champ}</p>
+                                        <button onclick="removeFromTeam('${champ}')">❌</button>
+                                    </div>
+                                    `
+                              )
+                              .join("")}
+                        </div>`
+                    : `<p>Aucun champion dans l'équipe.</p>`
+                }
             </div>
             <div class="score-section">
                 <p><strong>Score de l'équipe : ${score}</strong></p>
+                <p>Puissance estimée (ratio avec le score maximal) : ${(
+                  (score / bestScore) *
+                  100
+                ).toFixed(1)}%</p>
+                <button 
+                    style="font-size: 1.5em; background-color: green; color: white;" 
+                    onclick="generateRandomTeam()"
+                >
+                    Générer une équipe aléatoire
+                </button>
             </div>
         </div>
         <div class="synergies-section">
-                <h3>Synergies Actives</h3>
-                ${synergiesHTML || "<p>Aucune synergie active.</p>"}
-            </div>
+            <h3>Synergies Actives</h3>
+            ${synergiesHTML || "<p>Aucune synergie active.</p>"}
         </div>
-        
-        `;
+    </div>
+`;
 }
 
 function removeFromTeam(champion) {
@@ -606,6 +620,29 @@ function handleTypeClick(type) {
 function handleCostClick(cost) {
   selectedCost = cost;
   updateResults();
+}
+
+function generateRandomTeam() {
+  const teamSize = 10; // Taille maximale de l'équipe
+  const championsList = Object.entries(tftOntology.Champions.Origine).flatMap(
+    ([_, types]) =>
+      Object.values(types).flatMap((costs) => Object.values(costs).flat())
+  );
+
+  // Générer une équipe aléatoire
+  team = [];
+  const availableChampions = [...championsList];
+
+  for (let i = 0; i < teamSize; i++) {
+    if (availableChampions.length === 0) break;
+
+    const randomIndex = Math.floor(Math.random() * availableChampions.length);
+    team.push(availableChampions[randomIndex]);
+    availableChampions.splice(randomIndex, 1); // Retirer le champion sélectionné
+  }
+
+  // Rafraîchir l'affichage
+  updateTeam();
 }
 
 // Initialiser les filtres
